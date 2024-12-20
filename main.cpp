@@ -12,7 +12,7 @@ using String = std::string;
 //  @param priorty_rating priority of the task. 
 class Task{
     public:
-    Task(const std::string& taskName = "Default", const std::string& taskDescrip = "Default", const int& priority_rating = 0){
+    Task(const std::string& taskName = "Default", const std::string& taskDescrip = "Default", const int priority_rating = 0){
         taskN = taskName;
         taskD = taskDescrip;
         priority = priority_rating;
@@ -61,13 +61,35 @@ int main(){
         cout << "Option 1: Tasks to Do" << endl;
         cout << "Option 2: Tasks to Completed" << endl;
         cout << "Option 3: Add Tasks" << endl;
+        cout <<"Enter user input: " <<std::flush;
         
-        cout <<"Enter user input: " << std::flush;
-        cin >> userInput;
+        std::getline(cin,userInput);
         //Option 1 is to view tasks that have not been completed. 
         //Suboption menus to look at task description and then have an option to count as complete.
         if(userInput == "1"){
             printTasks(toDoTasks);
+            cout << "Which tasks would you like to view?: " << endl;
+            cin >> userInput;
+            
+            cout << toDoTasks[std::stoi(userInput)].getTaskDescription();
+            
+            do
+            {
+                cout << "Would you like to view another task?(Y/N): ";
+                cin >> userInput;
+                if(userInput == "Y"){
+                    printTasks(toDoTasks);
+                    cout << "Which tasks would you like to view?: " << endl;
+                    cin >> userInput;
+                    cout << "-----------------\n" << std::flush;
+                    cout << toDoTasks[std::stoi(userInput)].getTaskDescription() << endl;
+                    cout << "-----------------\n" << std::flush;
+                }
+                else{
+                    break;
+                }
+
+            } while (userInput != "N");
         }
 
         //Option 2 is to view tasks have been completed.
@@ -84,24 +106,26 @@ int main(){
             if(userInput == "Y"){
                 do
                 {
-                    //Task Name passed in as a temp string.
-                    cout << "Task Name: " << std::flush;
-                    cin >> userInput;
-                    String tempName = userInput;
+                    //Task Name
+                    cout << "Task Name: " << std::flush; 
+            
+                    String tempName = userInput; 
 
-                    //Task Description passed in as a temp string.
-                    cout << "Task Description: ";
-                    cin >> userInput;
+                    //Task description passed in as a string
+                    cout << "Task Description: " << std::flush; 
+                    std::getline(cin, userInput); 
                     String tempDescription = userInput;
 
                     //Priority passed in as a temp integer.
                     cout << "What is the priortiy rating of the task (1-100)?: " << std::flush;
                     cin >> userInput;
                     const int tempRating = std::stoi(userInput);
+
+                    //Creates new task object with the specifiers.
                     Task newTask(tempName,tempDescription,tempRating);
 
                     //Add to the toDoTasksVector which ends up as the last element.
-                    toDoTasks.push_back(newTask);
+                    toDoTasks.push_back(std::move(newTask));
 
                     //Asks user if they want to create another task.
                     cout << "Would you like to create another tasks? (Y/N): ";
