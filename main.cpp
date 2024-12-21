@@ -70,8 +70,11 @@ int main(){
             printTasks(toDoTasks);
             cout << "Which tasks would you like to view?: " << endl;
             cin >> userInput;
-            
-            cout << toDoTasks[std::stoi(userInput)].getTaskDescription();
+
+            cout << "-----------------\n" << std::flush;
+            cout << toDoTasks[std::stoi(userInput)].getTaskName() << ": " << endl;
+            cout << toDoTasks[std::stoi(userInput)].getTaskDescription() << endl;
+            cout << "-----------------\n" << std::flush;
             
             do
             {
@@ -101,43 +104,36 @@ int main(){
         //Option 3 is to add tasks to the list.
         //No suboption menus here.
         if(userInput == "3"){
-            cout << "Would you like to create a task (Y/N)?: ";
-            cin >> userInput;
-            if(userInput == "Y"){
-                do
-                {
-                    //Task Name
-                    cout << "Task Name: " << std::flush; 
-            
-                    String tempName = userInput; 
+            do
+            {
+                //Task Name, // @bug the getline in this is not getting this line.
+                cout << "Task Name: " << std::flush; 
+                std::getline(cin, userInput); 
+                String tempName = userInput; 
 
-                    //Task description passed in as a string
-                    cout << "Task Description: " << std::flush; 
-                    std::getline(cin, userInput); 
-                    String tempDescription = userInput;
+                //Task description passed in as a string
+                cout << "Task Description: " << std::flush; 
+                std::getline(cin, userInput); 
+                String tempDescription = userInput;
 
-                    //Priority passed in as a temp integer.
-                    cout << "What is the priortiy rating of the task (1-100)?: " << std::flush;
-                    cin >> userInput;
-                    const int tempRating = std::stoi(userInput);
+                //Priority passed in as a temp integer.
+                cout << "What is the priortiy rating of the task (1-100)?: " << std::flush;
+                cin >> userInput;
+                const int tempRating = std::stoi(userInput);
 
-                    //Creates new task object with the specifiers.
-                    Task newTask(tempName,tempDescription,tempRating);
+                //Creates new task object with the specifiers.
+                Task newTask(tempName,tempDescription,tempRating);
 
-                    //Add to the toDoTasksVector which ends up as the last element.
-                    toDoTasks.push_back(std::move(newTask));
+                //Add to the toDoTasksVector which ends up as the last element.
+                toDoTasks.push_back(std::move(newTask));
 
-                    //Asks user if they want to create another task.
-                    cout << "Would you like to create another tasks? (Y/N): ";
-                    cin >> userInput;
-                } while (userInput != "N");
-            }   
-            else{ //User does not want to create a task so send then back to main menu.
-                continue;
-            }
+                //Asks user if they want to create another task.
+                cout << "Would you like to create another tasks? (Y/N): ";
+                cin >> userInput;
+                
+            }while (userInput != "N");
         }
+        std::cin.ignore();
     }
-
-    return 0;
-    
+    return 0; 
 }
